@@ -6,13 +6,16 @@ int birthdayCakeCandles(int n) {
     int count = 0;
     int height;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) 
+    {
         cin >> height;
-        if (height > max_height) {
+        if (height > max_height) 
+        {
             max_height = height;
             count = 1;
         }
-        else if (height == max_height) {
+        else if (height == max_height) 
+        {
             count++;
         }
     }
