@@ -5,6 +5,6 @@ Languages Used
 - Python 3
 - C++
 - C# (some solutions)
-- Java (working to improve my skills)
+- Java ( Working to improve my skills )
 
  Notes : The solutions are here to support and share my own learning.
