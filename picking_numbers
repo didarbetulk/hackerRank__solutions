@@ -1,0 +1,29 @@
+using System;
+
+class Program
+{
+    static int pickingNumbers(int[] a)
+    {
+        int[] freq = new int[100];
+        foreach (int num in a)
+            freq[num]++;
+        int maxLen = 0;
+        for (int i = 1; i < 100; i++)
+        {
+            int currentLen = freq[i] + freq[i - 1];
+            if (currentLen > maxLen)
+                maxLen = currentLen;
+        }
+        return maxLen;
+    }
+
+    static void Main(string[] args)
+    {
+        // Ilk satirda n var ama kullanmaya gerek yok
+        int n = int.Parse(Console.ReadLine());
+        string[] tokens = Console.ReadLine().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        int[] arr = Array.ConvertAll(tokens, int.Parse);
+
+        Console.WriteLine(pickingNumbers(arr));
+    }
+}
