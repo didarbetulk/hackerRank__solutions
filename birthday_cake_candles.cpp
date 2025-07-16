@@ -21,7 +21,7 @@ int birthdayCakeCandles(int n) {
     }
     return count;
 }
-
+// i couldn't solve the question because it's my birthday today :)
 int main() {
     int n;
     cin >> n;
