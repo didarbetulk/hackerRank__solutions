@@ -1,16 +1,14 @@
 import sys
+
 class SAM:
     def __init__(self):
-        self.next = [{}]         # transitions
-        self.link = [-1]         # suffix links
-        self.length = [0]        # max length for state
+        self.next = [{}]
+        self.link = [-1]
+        self.length = [0]
         self.last = 0
 
     def extend(self, ch):
-        nxt = self.next
-        link = self.link
-        length = self.length
-
+        nxt, link, length = self.next, self.link, self.length
         cur = len(nxt)
         nxt.append({})
         link.append(0)
@@ -38,12 +36,24 @@ class SAM:
                 link[q] = link[cur] = clone
         self.last = cur
 
-    # longest prefix of s[pos:] that is a substring of current text
-    def longest_match_from(self, s, pos):
+    # match up to cap first (quick check); if we reach cap, continue to max
+    def longest_with_cap(self, s, pos, cap):
         v = 0
         L = 0
         n = len(s)
         nxt = self.next
+
+        # try to reach cap quickly
+        while L < cap and pos + L < n:
+            c = s[pos + L]
+            t = nxt[v].get(c)
+            if t is None:
+                return L, v  # fell short of cap
+            v = t
+            L += 1
+
+        # if cap not reached, already returned
+        # otherwise continue maximally
         while pos + L < n:
             c = s[pos + L]
             t = nxt[v].get(c)
@@ -51,29 +61,33 @@ class SAM:
                 break
             v = t
             L += 1
-        return L
+        return L, v
 
 def min_cost_for_string(s, A, B):
-    sam = SAM()
-    i = 0
     n = len(s)
+    if B >= A:
+        return A * n
+
+    need = B // A + 1  # minimal length that makes copy cheaper than appends
+    sam = SAM()
     cost = 0
+    i = 0
+
     while i < n:
-        L = sam.longest_match_from(s, i)
-        if L > 0 and B < A * L:
-            # copy best we can (flat cost, so take all L)
+        L, _ = sam.longest_with_cap(s, i, need)
+        if L >= need:
+            # get full L already computed
             cost += B
             for k in range(L):
                 sam.extend(s[i + k])
             i += L
         else:
-            # append one character
             cost += A
             sam.extend(s[i])
             i += 1
     return cost
 
-def main():
+def solve():
     data = [line.strip() for line in sys.stdin if line.strip() != ""]
     t = int(data[0])
     out = []
@@ -83,12 +97,13 @@ def main():
         idx += 1
         s = data[idx]
         idx += 1
-        A = int(A_str)
-        B = int(B_str)
+        A = int(A_str); B = int(B_str)
         out.append(str(min_cost_for_string(s, A, B)))
-    sys.stdout.write("\n".join(out))
+    print("\n".join(out))
 
-if __name__ == "__main__":
-    main()
+if name== "main":
+    solve()
+
 # 21 testten 6 tanesini gecti... simdiye kadar oluşturulan metni temsilen bir suffix automation (sam) yapısı tutuyor. 
 #her adimda eklenmemmis kismin mevcut metinde zaaten gecen en uzun başlangıc parcasının(prefix)uzunlugunu buluyoruz ve bu uzunluk L oluyor.... 
+#yeni haber. artik hic calismiyorr :)
